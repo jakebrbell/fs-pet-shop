@@ -109,6 +109,39 @@ else if (cmd === 'update') {
     }
   });
 }
+else if (cmd === 'destroy') {
+  fs.readFile(petsPath, 'utf8', function(destroyErr, data) {
+    if (destroyErr) {
+      throw destroyErr;
+    }
+
+    var index = Number(process.argv[3]);
+    var pets = JSON.parse(data);
+
+    if (index) {
+      if (pets[index]) {
+        var pet = pets.splice(index, 1);
+        var petsJSON = JSON.stringify(pets);
+
+        fs.writeFile(petsPath, petsJSON, function(writeErr) {
+          if (writeErr) {
+            throw writeErr;
+          }
+
+          console.log(pet);
+        });
+      }
+      else {
+        console.error(`Usage: ${node} ${file} destroy INDEX`);
+        process.exit(1);
+      }
+    }
+    else {
+      console.error(`Usage: ${node} ${file} destroy INDEX`);
+      process.exit(1);
+    }
+  });
+}
 else {
   console.error(`Usage: ${node} ${file} [read | create | update |destroy]`);
   process.exit(1);
