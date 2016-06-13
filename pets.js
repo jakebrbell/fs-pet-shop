@@ -14,9 +14,21 @@ if (cmd === 'read') {
       throw err;
     }
 
+    var index = process.argv[3];
     var pets = JSON.parse(data);
 
-    console.log(pets);
+    if (index) {
+      if (pets[index]) {
+        console.log(pets[index]);
+      }
+      else {
+        console.error(`Usage: ${node} ${file} read INDEX`);
+        process.exit(1);
+      }
+    }
+    else {
+      console.log(pets);
+    }
   });
 }
 else {
