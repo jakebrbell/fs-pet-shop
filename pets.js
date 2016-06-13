@@ -1,21 +1,21 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var petsPath = path.join(__dirname, 'pets.json');
+const fs = require('fs');
+const path = require('path');
+const petsPath = path.join(__dirname, 'pets.json');
 
-var node = path.basename(process.argv[0]);
-var file = path.basename(process.argv[1]);
-var cmd = process.argv[2];
+const node = path.basename(process.argv[0]);
+const file = path.basename(process.argv[1]);
+const cmd = process.argv[2];
 
 if (cmd === 'read') {
-  fs.readFile(petsPath, 'utf8', function(err, data) {
+  fs.readFile(petsPath, 'utf8', (err, data) => {
     if (err) {
       throw err;
     }
 
-    var index = Number(process.argv[3]);
-    var pets = JSON.parse(data);
+    const index = Number(process.argv[3]);
+    const pets = JSON.parse(data);
 
     if (index) {
       if (pets[index]) {
@@ -32,27 +32,24 @@ if (cmd === 'read') {
   });
 }
 else if (cmd === 'create') {
-  fs.readFile(petsPath, 'utf8', function(readErr, data) {
+  fs.readFile(petsPath, 'utf8', (readErr, data) => {
     if (readErr) {
       throw readErr;
     }
 
-    var age = Number(process.argv[3]);
-    var kind = process.argv[4];
-    var name = process.argv[5];
+    const age = Number(process.argv[3]);
+    const kind = process.argv[4];
+    const name = process.argv[5];
 
     if (age && kind && name) {
-      var pets = JSON.parse(data);
-      var pet = {
-        age: age,
-        kind: kind,
-        name: name
-      };
+      const pets = JSON.parse(data);
+      const pet = { age, kind, name };
+
       pets.push(pet);
 
-      var petsJSON = JSON.stringify(pets);
+      const petsJSON = JSON.stringify(pets);
 
-      fs.writeFile(petsPath, petsJSON, function(writeErr) {
+      fs.writeFile(petsPath, petsJSON, (writeErr) => {
         if (writeErr) {
           throw writeErr;
         }
@@ -67,30 +64,27 @@ else if (cmd === 'create') {
   });
 }
 else if (cmd === 'update') {
-  fs.readFile(petsPath, 'utf8', function(updateErr, data) {
+  fs.readFile(petsPath, 'utf8', (updateErr, data) => {
     if (updateErr) {
       throw updateErr;
     }
 
-    var index = Number(process.argv[3]);
-    var age = Number(process.argv[4]);
-    var kind = process.argv[5];
-    var name = process.argv[6];
+    const index = Number(process.argv[3]);
+    const age = Number(process.argv[4]);
+    const kind = process.argv[5];
+    const name = process.argv[6];
 
     if (index && age && kind && name) {
-      var pets = JSON.parse(data);
+      const pets = JSON.parse(data);
 
       if (pets[index]) {
-        var pet = {
-          age: age,
-          kind: kind,
-          name: name
-        };
+        const pet = { age, kind, name };
+
         pets[index] = pet;
 
-        var petsJSON = JSON.stringify(pets);
+        const petsJSON = JSON.stringify(pets);
 
-        fs.writeFile(petsPath, petsJSON, function(writeErr) {
+        fs.writeFile(petsPath, petsJSON, (writeErr) => {
           if (writeErr) {
             throw writeErr;
           }
@@ -110,20 +104,20 @@ else if (cmd === 'update') {
   });
 }
 else if (cmd === 'destroy') {
-  fs.readFile(petsPath, 'utf8', function(destroyErr, data) {
+  fs.readFile(petsPath, 'utf8', (destroyErr, data) => {
     if (destroyErr) {
       throw destroyErr;
     }
 
-    var index = Number(process.argv[3]);
-    var pets = JSON.parse(data);
+    const index = Number(process.argv[3]);
+    const pets = JSON.parse(data);
 
     if (index) {
       if (pets[index]) {
-        var pet = pets.splice(index, 1);
-        var petsJSON = JSON.stringify(pets);
+        const pet = pets.splice(index, 1);
+        const petsJSON = JSON.stringify(pets);
 
-        fs.writeFile(petsPath, petsJSON, function(writeErr) {
+        fs.writeFile(petsPath, petsJSON, (writeErr) => {
           if (writeErr) {
             throw writeErr;
           }
