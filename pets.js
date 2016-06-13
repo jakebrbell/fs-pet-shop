@@ -14,7 +14,7 @@ if (cmd === 'read') {
       throw err;
     }
 
-    var index = process.argv[3];
+    var index = Number(process.argv[3]);
     var pets = JSON.parse(data);
 
     if (index) {
@@ -62,6 +62,49 @@ else if (cmd === 'create') {
     }
     else {
       console.error(`Usage: ${node} ${file} create AGE KIND NAME`);
+      process.exit(1);
+    }
+  });
+}
+else if (cmd === 'update') {
+  fs.readFile(petsPath, 'utf8', function(updateErr, data) {
+    if (updateErr) {
+      throw updateErr;
+    }
+
+    var index = Number(process.argv[3]);
+    var age = Number(process.argv[4]);
+    var kind = process.argv[5];
+    var name = process.argv[6];
+
+    if (index && age && kind && name) {
+      var pets = JSON.parse(data);
+
+      if (pets[index]) {
+        var pet = {
+          age: age,
+          kind: kind,
+          name: name
+        };
+        pets[index] = pet;
+
+        var petsJSON = JSON.stringify(pets);
+
+        fs.writeFile(petsPath, petsJSON, function(writeErr) {
+          if (writeErr) {
+            throw writeErr;
+          }
+
+          console.log(pet);
+        });
+      }
+      else {
+        console.error(`Usage: ${node} ${file} update INDEX AGE KIND NAME`);
+        process.exit(1);
+      }
+    }
+    else {
+      console.error(`Usage: ${node} ${file} update INDEX AGE KIND NAME`);
       process.exit(1);
     }
   });
