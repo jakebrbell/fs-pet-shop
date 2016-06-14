@@ -1,0 +1,24 @@
+{
+  "name": "pet-shop",
+  "version": "1.0.0",
+  "description": "A Node.js HTTP server to manage a pet shop inventory",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jakebrbell/fs-pet-shop.git"
+  },
+  "keywords": [
+    "node",
+    "http",
+    "pets"
+  ],
+  "author": "Jake Bell",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jakebrbell/fs-pet-shop/issues"
+  },
+  "homepage": "https://github.com/jakebrbell/fs-pet-shop#readme"
+}
