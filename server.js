@@ -47,6 +47,10 @@ app.get('/pets/:id', (req, res) => {
   });
 });
 
+app.use((req, res) => {
+  res.sendStatus(404);
+});
+
 app.listen(port, () => {
   console.log('Listening on port', port);
 });
