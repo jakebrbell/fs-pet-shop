@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/jakebrbell/fs-pet-shop#readme",
   "dependencies": {
+    "body-parser": "^1.15.1",
     "express": "^4.13.4",
     "morgan": "^1.7.0"
   }
