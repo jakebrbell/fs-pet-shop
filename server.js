@@ -29,6 +29,39 @@ app.get('/pets', (req, res) => {
   });
 });
 
+app.post('/pets', (req, res) => {
+  fs.readFile(petsPath, 'utf8', (readErr, petsJSON) => {
+    if (readErr) {
+      console.error(readErr.stack);
+      return res.sendStatus(500);
+    }
+
+    const pet = {
+      age: req.body.age,
+      kind: req.body.kind,
+      name: req.body.name
+    };
+    const pets = JSON.parse(petsJSON);
+
+    if(!pet.age || !pet.kind || !pet.name) {
+      return res.send(400);
+    }
+
+    pets.push(pet);
+
+    const newPetsJSON = JSON.stringify(pets);
+
+    fs.writeFile(petsPath, newPetsJSON, (writeErr) => {
+      if (writeErr) {
+        console.error(writeErr.stack);
+        return res.sendStatus(500);
+      }
+
+      res.send(req.body);
+    });
+  });
+});
+
 app.get('/pets/:id', (req, res) => {
   fs.readFile(petsPath, 'utf8', (err, petsJSON) => {
     if (err) {
