@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 'use strict';
 
 const fs = require('fs');
@@ -20,6 +22,7 @@ if (cmd === 'read') {
     if (index) {
       if (pets[index]) {
         console.log(pets[index]);
+        process.exit();
       }
       else {
         console.error(`Usage: ${node} ${file} read INDEX`);
@@ -114,7 +117,7 @@ else if (cmd === 'destroy') {
 
     if (index) {
       if (pets[index]) {
-        const pet = pets.splice(index, 1);
+        const pet = pets.splice(index, 1)[0];
         const petsJSON = JSON.stringify(pets);
 
         fs.writeFile(petsPath, petsJSON, (writeErr) => {
