@@ -15,3 +15,20 @@ app.use(morgan('short'));
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
+
+app.get('/pets', (req, res) => {
+  fs.readFile(petsPath, 'utf8', (err, petsJSON) => {
+    if (err) {
+      console.error(err.stack);
+      return res.sendStatus(500);
+    }
+
+    const pets = JSON.parse(petsJSON);
+
+    res.send(pets);
+  });
+});
+
+app.listen(port, () => {
+  console.log('Listening on port', port);
+});
