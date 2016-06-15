@@ -29,6 +29,24 @@ app.get('/pets', (req, res) => {
   });
 });
 
+app.get('/pets/:id', (req, res) => {
+  fs.readFile(petsPath, 'utf8', (err, petsJSON) => {
+    if (err) {
+      console.error(err.stack);
+      return res.sendStatus(500);
+    }
+
+    const id = Number.parseInt(req.params.id);
+    const pets = JSON.parse(petsJSON);
+
+    if (id < 0 || id >= pets.length || Number.isNaN(id)) {
+      return res.sendStatus(400);
+    }
+
+    res.send(pets[id]);
+  });
+});
+
 app.listen(port, () => {
   console.log('Listening on port', port);
 });
