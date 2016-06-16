@@ -110,6 +110,32 @@ app.put('/pets/:id', (req, res) => {
   });
 });
 
+app.delete('/pets/:id', (req, res) => {
+  fs.readFile(petsPath, 'utf8', (readErr, petsJSON) => {
+    if (readErr) {
+      return next(readErr);
+    }
+
+    const id = Number.parseInt(req.params.id);
+    const pets = JSON.parse(petsJSON);
+
+    if (Number.isNaN(id) || id < 0 || id >= pets.length) {
+      return res.sendStatus(404);
+    }
+
+    const pet = pets.splice(id, 1)[0];
+    const newPetsJSON = JSON.stringify(pets);
+
+    fs.writeFile(petsPath, newPetsJSON, (writeErr) => {
+      if (writeErr) {
+        return next(writeErr);
+      }
+
+      res.send(pet);
+    });
+  });
+});
+
 app.get('/boom', (_req, _res, next) => {
   next(new Error('BOOM!'));
 });
