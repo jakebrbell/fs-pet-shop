@@ -54,7 +54,7 @@ app.post('/pets', (req, res, next) => {
     const age = Number.parseInt(req.body.age);
     const {kind, name} = req.body;
 
-    if(Number.isNaN(age) || !kind || !name) {
+    if (Number.isNaN(age) || !kind || !name) {
       return res.sendStatus(400);
     }
 
@@ -75,7 +75,39 @@ app.post('/pets', (req, res, next) => {
 });
 
 app.put('/pets/:id', (req, res) => {
-  
+  fs.readFile(petsPath, 'utf8', (readErr, petsJSON) => {
+    if (readErr) {
+      return next(readErr);
+    }
+
+    const id = Number.parseInt(req.params.id);
+    const pets = JSON.parse(petsJSON);
+
+    if (Number.isNaN(id) || id < 0 || id >= pets.length) {
+      return res.sendStatus(404);
+    }
+
+    const age = Number.parseInt(req.body.age);
+    const {kind, name} = req.body;
+
+    if (Number.isNaN(age) || !kind || !name) {
+      return res.sendStatus(400);
+    }
+
+    const pet = { age, kind, name };
+
+    pets[id] = pet;
+
+    const newPetsJSON = JSON.stringify(pets);
+
+    fs.writeFile(petsPath, newPetsJSON, (writeErr) => {
+      if (writeErr) {
+        return next(writeErr);
+      }
+
+      res.send(pet);
+    });
+  });
 });
 
 app.get('/boom', (_req, _res, next) => {
