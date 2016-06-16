@@ -27,6 +27,23 @@ app.get('/pets', (_req, res) => {
   });
 });
 
+app.get('/pets/:id', (req, res, next) => {
+  fs.readFile(petsPath, 'utf8', (err, petsJSON) => {
+    if (err) {
+      return next(err);
+    }
+
+    const id = Number.parseInt(req.params.id);
+    const pets = JSON.parse(petsJSON);
+
+    if (id < 0 || id >= pets.length || Number.isNaN(id)) {
+      return res.sendStatus(404);
+    }
+
+    res.send(pets[id]);
+  });
+});
+
 app.post('/pets', (req, res, next) => {
   fs.readFile(petsPath, 'utf8', (readErr, petsJSON) => {
     if (readErr) {
@@ -57,21 +74,8 @@ app.post('/pets', (req, res, next) => {
   });
 });
 
-app.get('/pets/:id', (req, res, next) => {
-  fs.readFile(petsPath, 'utf8', (err, petsJSON) => {
-    if (err) {
-      return next(err);
-    }
-
-    const id = Number.parseInt(req.params.id);
-    const pets = JSON.parse(petsJSON);
-
-    if (id < 0 || id >= pets.length || Number.isNaN(id)) {
-      return res.sendStatus(404);
-    }
-
-    res.send(pets[id]);
-  });
+app.put('/pets/:id', (req, res) => {
+  
 });
 
 app.get('/boom', (_req, _res, next) => {
