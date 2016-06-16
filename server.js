@@ -37,14 +37,14 @@ app.post('/pets', (req, res) => {
     }
 
     const pet = {
-      age: req.body.age,
+      age: Number.parseInt(req.body.age),
       kind: req.body.kind,
       name: req.body.name
     };
     const pets = JSON.parse(petsJSON);
 
-    if(!pet.age || !pet.kind || !pet.name) {
-      return res.send(400);
+    if(!pet.age || Number.isNaN(pet.age) || !pet.kind || !pet.name) {
+      return res.sendStatus(400);
     }
 
     pets.push(pet);
@@ -57,7 +57,7 @@ app.post('/pets', (req, res) => {
         return res.sendStatus(500);
       }
 
-      res.send(req.body);
+      res.send(pet);
     });
   });
 });
