@@ -15,7 +15,7 @@ cd path/to/project
 Create and switch to a new feature branch.
 
 ```shell
-git checkout -b express_routes
+git checkout -b rest
 ```
 
 Install `body-parser` and `morgan` as a dependencies.
@@ -39,6 +39,8 @@ Your next task is to add routes to handle the create, update, and destroy HTTP c
 | `GET`          | `/pets/3`   | N/A                                                     | `200`           | `application/json`    | `{ "name": "Scooter", "age": 4, "kind": "puppy" }`      |
 | `DELETE`       | `/pets/3`   | N/A                                                     | `200`           | `application/json`    | `{ "name": "Scooter", "age": 4, "kind": "puppy" }`      |
 | `GET`          | `/pets/3`   | N/A                                                     | `404`           | `text/plain`          | `Not Found`                                             |
+| `GET`          | `/`         | N/A                                                     | `404`           | `text/plain`          | `Not found`                                             |
+| `GET`          | `/blah`     | N/A                                                     | `404`           | `text/plain`          | `Not found`                                             |
 
 Like before, start the HTTP server with `nodemon`.
 
@@ -49,7 +51,7 @@ nodemon server.js
 Open a new shell tab and use the `http` shell command to send HTTP requests to your server.
 
 ```shell
-http POST http://localhost:5000/pets age=3 kind=parakeet name=Cornflake
+http POST localhost:8000/pets age=3 kind=parakeet name=Cornflake
 ```
 
 When handling the `POST` and `PUT` HTTP request methods, if `age`, `kind`, or `name` are missing from the HTTP request body or `age` is not an integer, then the data must not be added to the database and the server must send back the follow HTTP response.
@@ -70,14 +72,36 @@ git checkout master
 Merge the feature branch into `master`.
 
 ```shell
-git merge express_routes
+git merge rest
 ```
 
 And delete the feature branch.
 
 ```shell
-git br -d express_routes
+git br -d rest
 ```
+
+Then, create a valid `Procfile` so you can deploy your RESTful Express server to Heroku.
+
+```shell
+echo 'web: node server.js' > Procfile
+```
+
+Add and commit this change to your local `master` branch. Then, create an app on Heroku.
+
+**NOTE:** Replace `USERNAME` with the lowercase form of your GitHub username.
+
+```shell
+heroku create USERNAME-pet-shop
+```
+
+And push the local `master` branch to your Heroku app's `master` branch.
+
+```shell
+git push heroku master
+```
+
+Throughly test your RESTful Express server on Heroku to verify it works as expected. Your instructors will be using your deployed server to grade this assignment. To help your instructors find your deployed server, be a pal and add the URL of your live Heroku app to the URL field on your GitHub repository's landing page.
 
 ## Bonus
 
@@ -96,15 +120,6 @@ Convert the code in your `server.js` file into ES6 syntax. It may be helpful to 
 
 - [`eslint-config-airbnb`]['airbnb']
 - [`eslint-config-ryansobol`]['ryansobol']
-
-## Bonus
-
-Add [404 Not Found]['404'] middleware to handle all unknown HTTP requests and send an appropriate response.
-
-| Request Method | Request URL | Response Status | Response Content-Type | Response Body |
-|----------------|-------------|-----------------|-----------------------|---------------|
-| `GET`          | `/`         | `404`           | `text/plain`          | `Not found`   |
-| `GET`          | `/blah`     | `404`           | `text/plain`          | `Not found`   |
 
 ## Bonus
 
@@ -133,12 +148,12 @@ To make an authorized HTTP request, the user must specify the correct credential
 Here's an example of making an unauthorized HTTP request.
 
 ```shell
-$ http -v GET http://localhost:5000/pets
+$ http -v GET http://localhost:8000/pets
 GET /pets HTTP/1.1
 Accept: */*
 Accept-Encoding: gzip, deflate
 Connection: keep-alive
-Host: localhost:5000
+Host: localhost:8000
 User-Agent: HTTPie/0.9.3
 
 
@@ -157,13 +172,13 @@ Unauthorized
 And here's an example of making an authorized HTTP request.
 
 ```shell
-$ http -v --auth admin:meowmix GET http://localhost:5000/pets
+$ http -v --auth admin:meowmix GET http://localhost:8000/pets
 GET /pets HTTP/1.1
 Accept: */*
 Accept-Encoding: gzip, deflate
 Authorization: Basic YWRtaW46bWVvd21peA==
 Connection: keep-alive
-Host: localhost:5000
+Host: localhost:8000
 User-Agent: HTTPie/0.9.3
 
 
@@ -188,6 +203,14 @@ ETag: W/"54-D2Au1DrDyt59Q+wXwR4adQ"
     }
 ]
 ```
+
+## Bonus
+
+Use an Express router to group and export your resource-specific `/pets` routes into a `routes/pets.js` module. In the `server.js` module, require and use it in the correct middleware order. To learn about the Express router, see the following documentation.
+
+- [Express API - `express.Router()`](http://expressjs.com/en/4x/api.html#express.router)
+- [Express API - Router](http://expressjs.com/en/4x/api.html#router)
+
 
 ['404']: http://expressjs.com/en/starter/faq.html#how-do-i-handle-404-responses
 ['500']: http://expressjs.com/en/starter/faq.html#how-do-i-setup-an-error-handler

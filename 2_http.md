@@ -37,6 +37,8 @@ Your task is to build a Node server application that handles the following HTTP 
 | `GET`          | `/pets/1`   | `200`           | `application/json`    | `{ "age": 5, "kind": "snake", "name": "Buttons" }`                                                         |
 | `GET`          | `/pets/2`   | `404`           | `text/plain`          | `Not found`                                                                                                |
 | `GET`          | `/pets/-1`  | `404`           | `text/plain`          | `Not found`                                                                                                |
+| `GET`          | `/`         | `404`           | `text/plain`          | `Not found`                                                                                                |
+| `GET`          | `/blah`     | `404`           | `text/plain`          | `Not found`                                                                                                |
 
 To test your HTTP server, first install the `nodemon` package globally.
 
@@ -56,10 +58,10 @@ Open a new shell tab and install HTTPie.
 brew install httpie
 ```
 
-Use the new `http` shell command to send HTTP requests to your server. Remember to set the port of your HTTP server to something like `5000`.
+Use the new `http` shell command to send HTTP requests to your server. Remember to set the port of your HTTP server to something like `8000`.
 
 ```shell
-http http://localhost:5000/pets
+http http://localhost:8000/pets
 ```
 
 ## Bonus
@@ -84,15 +86,6 @@ Be mindful about responding to indices that don't exist in the database.
 
 ## Bonus
 
-Add a catch all route handler for unknown HTTP requests and send the appropriate response.
-
-| Request Method | Request URL | Response Status | Response Content-Type | Response Body |
-|----------------|-------------|-----------------|-----------------------|---------------|
-| `GET`          | `/`         | `404`           | `text/plain`          | `Not found`   |
-| `GET`          | `/blah`     | `404`           | `text/plain`          | `Not found`   |
-
-## Bonus
-
 Convert the code in your `server.js` file into ES6 syntax. It may be helpful to use linting rules to assist in the conversion.
 
 - [`eslint-config-airbnb`]['airbnb']
@@ -110,7 +103,7 @@ In future parts of this assignment, your server will need to handle create, upda
 You can send create commands to the server app with the following command
 
 ```shell
-http POST http://localhost:5000/pets age=3 kind=parakeet name=Cornflake
+http POST localhost:8000/pets age=3 kind=parakeet name=Cornflake
 ```
 
 If `age`, `kind`, or `name` are missing from the HTTP request body or `age` is not an integer, then the data must not be added to the database and the server must send back the follow HTTP response.
@@ -119,6 +112,10 @@ If `age`, `kind`, or `name` are missing from the HTTP request body or `age` is n
 |----------------|-------------|--------------------------------------------|-----------------|-----------------------|---------------|
 | `POST`         | `/pets`     | `{ "name": "", "age": "two", "kind": "" }` | `400`           | `text/plain`          | `Bad Request` |
 | `GET`          | `/pets/4`   | N/A                                        | `404`           | `text/plain`          | `Not Found`   |
+
+## Bonus
+
+Deploy your HTTP server to Heroku.
 
 
 ['airbnb']: https://www.npmjs.com/package/eslint-config-airbnb
