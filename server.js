@@ -10,9 +10,13 @@ const port = process.env.PORT || 8000;
 
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const basicAccessAuth = require('./basic-access-auth');
 
 app.disable('x-powered-by');
 app.use(morgan('short'));
+
+app.use(basicAccessAuth);
+
 app.use(bodyParser.json());
 
 app.get('/pets', (_req, res) => {
@@ -123,11 +127,15 @@ app.patch('/pets/:id', (req, res) => {
       return res.sendStatus(404);
     }
 
+    if (!req.body.age && !req.body.kind && !req.body.name) {
+      return res.sendStatus(400);
+    }
+
     const age = Number.parseInt(req.body.age || pets[id].age);
     const kind = req.body.kind || pets[id].kind;
     const name = req.body.name || pets[id].name;
 
-    if (Number.isNaN(age) || !kind || !name) {
+    if (Number.isNaN(age)) {
       return res.sendStatus(400);
     }
 
